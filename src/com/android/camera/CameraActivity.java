@@ -260,6 +260,8 @@ public class CameraActivity extends Activity
     };
     private MemoryManager mMemoryManager;
     private MotionManager mMotionManager;
+    // Keep track of max brightness state
+    public boolean mMaxBrightness;
 
     @Override
     public CameraAppUI getCameraAppUI() {
@@ -559,6 +561,13 @@ public class CameraActivity extends Activity
                 eventprotos.CameraFailure.FailureReason.RECONNECT_FAILURE, null);
         Log.w(TAG, "Camera reconnection failure:" + info);
         CameraUtil.showErrorAndFinish(this, R.string.cannot_connect_camera);
+    }
+
+    @Override
+    public void onSettingChanged(SettingsManager settingsManager, String key) {
+        if (key.equals(Keys.KEY_MAX_BRIGHTNESS)) {
+            initMaxBrightness();
+        }
     }
 
     private static class MainHandler extends Handler {
@@ -1345,6 +1354,9 @@ public class CameraActivity extends Activity
         ModulesInfo.setupModules(mAppContext, mModuleManager);
 
         mSettingsManager = getServices().getSettingsManager();
+        mSettingsManager.addListener(this);
+        initMaxBrightness();
+
         AppUpgrader appUpgrader = new AppUpgrader(this);
         appUpgrader.upgrade(mSettingsManager);
         Keys.setDefaults(mSettingsManager, mAppContext);
@@ -1899,6 +1911,20 @@ public class CameraActivity extends Activity
             mCurrentModule.onLayoutOrientationChanged(
                     mLastLayoutOrientation == Configuration.ORIENTATION_LANDSCAPE);
         }
+    }
+
+    protected void initMaxBrightness() {
+        Window win = getWindow();
+        WindowManager.LayoutParams params = win.getAttributes();
+
+        mMaxBrightness = Keys.isMaxBrightnessOn(mSettingsManager);
+        if (mMaxBrightness) {
+            params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+        } else {
+            params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+        }
+
+        win.setAttributes(params);
     }
 
     @Override

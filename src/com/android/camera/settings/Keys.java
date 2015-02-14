@@ -74,6 +74,7 @@ public class Keys {
     public static final String KEY_HDR_PLUS_FLASH_MODE = "pref_hdr_plus_flash_mode";
     public static final String KEY_SHOULD_SHOW_SETTINGS_BUTTON_CLING =
             "pref_should_show_settings_button_cling";
+    public static final String KEY_MAX_BRIGHTNESS = "pref_max_brightness";
 
     /**
      * Set some number of defaults for the defined keys.
@@ -211,6 +212,14 @@ public class Keys {
     public static boolean areGridLinesOn(SettingsManager settingsManager) {
         return settingsManager.getBoolean(SettingsManager.SCOPE_GLOBAL,
                                           KEY_CAMERA_GRID_LINES);
+    }
+
+    /**
+     * Returns whether max brightness is set on.
+     */
+    public static boolean isMaxBrightnessOn(SettingsManager settingsManager) {
+        return settingsManager.getBoolean(SettingsManager.SCOPE_GLOBAL,
+                KEY_MAX_BRIGHTNESS);
     }
 
     /**
