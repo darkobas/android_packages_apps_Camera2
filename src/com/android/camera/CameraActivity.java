@@ -157,7 +157,7 @@ import java.util.concurrent.TimeUnit;
 public class CameraActivity extends Activity
         implements AppController, CameraAgent.CameraOpenCallback,
         ShareActionProvider.OnShareTargetSelectedListener,
-        OrientationManager.OnOrientationChangeListener {
+        OrientationManager.OnOrientationChangeListener, SettingsManager.OnSettingChangedListener {
 
     private static final Log.Tag TAG = new Log.Tag("CameraActivity");
 
